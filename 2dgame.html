@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+        }
+        #queen {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: red;
+            border-radius: 50%;
+            visibility: hidden;
+        }
+        @keyframes fade-out {
+            from {opacity: 1;}
+            to {opacity: 0;}
+        }
+        .fade-out{
+            animation: fade-out 3s;
+            animation-fill-mode: forwards;
+        }
+
+    </style>
+
+ </head>
+<body>
+
+<div id="queen" class="queen"></div>
+<script>
+    let leftPosition = 0;
+    let topPosition = 0;
+    window.onload = function () {
+
+        leftPosition = +window.localStorage.getItem("leftPosition");
+        topPosition = +window.localStorage.getItem("topPosition");
+        let directionX = "left";
+        let directionY ='top';
+        function game() {
+            if(directionY == 'top'){
+                topPosition +=5;
+                if(topPosition + 50 >= window.innerHeight){
+                    directionY ="bot";
+                    queen.style.background = 'blue';
+                }
+            }
+            if(directionY == 'bot'){
+                topPosition -=5;
+                if(topPosition <=0){
+                    directionY = 'top';
+                    queen.style.background = 'yellow';
+                }
+            }
+            if (directionX == "left") {
+                leftPosition += 5;
+                if (leftPosition + 50 >= window.innerWidth) {
+                    directionX = "right";
+                    queen.style.background = 'green';
+                }
+            }
+            if (directionX == "right") {
+                leftPosition-= 5;
+                if (leftPosition <= 0) {
+                    directionX = "left";
+                    queen.style.background = 'pink';
+                }
+            }
+            queen.style.top = topPosition + "px";
+            queen.style.left = leftPosition + "px";
+            queen.style.visibility = "visible";
+        }
+
+        function appear() {
+            queen.classList.remove('fade-out');
+
+        }
+
+        setInterval(game, 100);
+        queen.onclick = function () {
+            queen.classList.add('fade-out');
+            setTimeout(appear, 3000);
+        }
+
+
+        window.onunload = function () {
+            window.localStorage.setItem("leftPosition", leftPosition);
+            window.localStorage.setItem("topPosition", topPosition);
+        }
+    }
+
+
+</script>
+
+</body>
+</html>
